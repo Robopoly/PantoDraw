@@ -112,7 +112,7 @@ y = (-L1/2 + Eym):0.5:(L1/2+Eym);
 
 %%
 %Final plots
-close all
+%close all
 %Variables
 syms q1 q2
 L1 = 90;
