@@ -8,11 +8,14 @@ classdef pentoDraw < handle
         serial_
         pos1
         pos2
+        tablePos
         a
         L1
         L2
         Axe
         Fig
+        tableUp
+        tableDown
     end
     
     methods
@@ -20,7 +23,7 @@ classdef pentoDraw < handle
             if nargin > 0
                 sP.serial_ = serial(serialPort, 'Baudrate', 9600);
                 sP.serial_.BytesAvailableFcnMode = 'byte';
-                sP.serial_.BytesAvailableFcnCount = 3;
+                sP.serial_.BytesAvailableFcnCount = 4;
                 sP.serial_.BytesAvailableFcn = @(src,event)sP.dataReceived;
                 
                 
@@ -36,7 +39,8 @@ classdef pentoDraw < handle
                 sP.L1 = 90;
                 sP.L2 = 125;
             end
-            
+            sP.tableUp = 110;
+            sP.tableDown = 80;
             sP.Axe = axes();
             sP.Fig = gcf;
             set(gcf,'CloseRequestFcn',@sP.closeWin)
@@ -56,16 +60,17 @@ classdef pentoDraw < handle
             delete(sP);
         end
         % between 0 and 180 °
-        function setPos(sP,alpha1,alpha2)
-            fwrite(sP.serial_,uint8(['P' alpha1 alpha2]));
+        function setPos(sP,alpha1,alpha2, tablePos)
+            fwrite(sP.serial_,uint8(['P' alpha1 alpha2 tablePos]));
             disp('dataSent');
         end
         %Response from pento
         function dataReceived(obj,srcHandle,eventData)
             disp('dataReiceved');
-            values = fread(obj.serial_,3);
+            values = fread(obj.serial_,4);
             obj.pos1 = values(2);
             obj.pos2 = values(3);
+            obj.tablePos = values(4);
         end
         
         
@@ -77,7 +82,7 @@ classdef pentoDraw < handle
             [a1,a2] = MGI(x,y,sP.L1,sP.L2,sP.a);
             a1 = a1 / pi * 180;
             a2 = a2 / pi * 180;
-            setPos(sP,a1,a2);
+            setPos(sP,a1,a2,sP.tableDown);
             r=line(x, y, 'color', [0 .5 1], 'LineWidth', 2, 'hittest', 'off'); %turning     hittset off allows you to draw new lines that start on top of an existing line.
             set(sP.Fig,'windowbuttonmotionfcn',{@sP.continue_pencil,r})
             set(sP.Fig,'windowbuttonupfcn',@sP.done_pencil)
@@ -90,7 +95,7 @@ classdef pentoDraw < handle
             [a1,a2] = MGI(x,y,sP.L1,sP.L2,sP.a);
             a1 = a1 / pi * 180;
             a2 = a2 / pi * 180;
-            setPos(sP,a1,a2);
+            setPos(sP,a1,a2,sP.tableUp);
             %get the line's existing coordinates and append the new ones.
             lastx=get(r,'xdata');
             lasty=get(r,'ydata');
@@ -102,6 +107,38 @@ classdef pentoDraw < handle
             %all this funciton does is turn the motion function off
             set(sP.Fig,'windowbuttonmotionfcn','')
             set(sP.Fig,'windowbuttonupfcn','')
+            setPos(sP,sP.pos1,sP.pos2,sP.tableDown);
+        end
+        function drawCircle(sP,evnt,radius)
+            N = 360;
+            pause on;
+            setPos(sP,sP.pos1,sP.pos2,sP.tableDown);
+            for i=0:N
+                x = radius*cos(i*2*pi/N)
+                y = radius*sin(i*2*pi/N) + 125;
+                [a1,a2] = MGI(x,y,sP.L1,sP.L2,sP.a);
+                a1 = a1 / pi * 180
+                a2 = a2 / pi * 180
+                setPos(sP,a1,a2,sP.tableUp);
+                %pause(2/360);
+            end
+            setPos(sP,sP.pos1,sP.pos2,sP.tableDown);
+            
+        end
+        function drawLine(sP,evnt,height)
+            pause on;
+            setPos(sP,sP.pos1,sP.pos2,sP.tableDown);
+            for i=-50:50
+                x = i
+                y = height;
+                [a1,a2] = MGI(x,y,sP.L1,sP.L2,sP.a);
+                a1 = a1 / pi * 180
+                a2 = a2 / pi * 180
+                setPos(sP,a1,a2,sP.tableUp);
+                pause(2/360);
+            end
+            setPos(sP,sP.pos1,sP.pos2,sP.tableDown);
+            
         end
         
     end
