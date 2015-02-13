@@ -1,0 +1,6 @@
+
+PLATFORM = 'PC'
+#PLATFORM = 'BEAGLE'
+
+
+

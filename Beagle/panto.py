@@ -9,7 +9,11 @@ import sys
 import numpy as np
 import cPickle
 import mgi
-import pantolib
+import config
+if config.PLATFORM == 'BEAGLE': 
+    import pantolib
+else:
+    import pantolib_dummy as pantolib
 
 TIME_BETWEEN_POINTS = 0.05      # in seconds
 TIME_BETWEEN_CONTOURS = 0.5    # in seconds
@@ -75,7 +79,7 @@ def printContours (contours):
 
 
 pantolib.Init()
-cap = cv2.VideoCapture(0)
+
 while True:
 
     if APP_STATE == APP_STATE_INIT:
@@ -86,9 +90,18 @@ while True:
         print "Press n to advance to the next step..."
 
     elif APP_STATE == APP_STATE_TAKE_PICTURE:
-        ret,img = cap.read()
-	cv2.imwrite('1.jpg', img)
+
+        if config.PLATFORM == 'BEAGLE':
+            
+            cap = cv2.VideoCapture(0)
+
+            ret,img = cap.read()
+            cv2.imwrite('1.jpg', img)
       
+            # When everything done, release the capture
+            cap.release()
+            cv2.destroyAllWindows()
+
         img = cv2.imread('1.jpg')
         cv2.imshow('Picture', img)
 
@@ -127,7 +140,8 @@ while True:
         cv2.createTrackbar('1', 'edge', 2000, 5000, nothing)
         cv2.createTrackbar('2', 'edge', 4000, 5000, nothing)
 
-        img = cv2.imread('resized.jpg')
+        #img = cv2.imread('resized.jpg')
+        img = cv2.imread('1.jpg')
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         print "Adjust the thresholds..."
         print "Press n when done."
@@ -140,7 +154,7 @@ while True:
             vis /= 2
             vis[edge != 0] = (0, 255, 0)
             cv2.imshow('edge', vis)
-            ch = cv2.waitKey(5)
+            ch = cv2.waitKey(50)
             if ch == ord('n'):
                 break
 
