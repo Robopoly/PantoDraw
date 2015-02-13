@@ -11,12 +11,13 @@ import cPickle
 import mgi
 import pantolib
 
-TIME_BETWEEN_POINTS = 0.1      # in seconds
+TIME_BETWEEN_POINTS = 0.05      # in seconds
 TIME_BETWEEN_CONTOURS = 0.5    # in seconds
 
-resized_width = 150
-x_trans_factor = -75
-y_trans_factor = 75
+max_width = 140
+max_height = 90
+x_trans_factor = 0
+y_trans_factor = 0
 
 APP_STATE_INIT = 0
 APP_STATE_TAKE_PICTURE = 1
@@ -49,7 +50,7 @@ def printContours (contours):
             pantolib.Down()
             [[ x, y ]] = c[0]
             x_trans = x + x_trans_factor
-            y_trans = y + y_trans_factor
+            y_trans = -y + y_trans_factor
             (q1, q2) = mgi.MGI(x_trans, y_trans)
             print 'x: ', x, 'y:', y, '	--> x-trans: ', x_trans, 'y_trans:', y_trans, '	--> q1: ', q1, 'q2:', q2
             pantolib.GoTo(q1, q2)
@@ -61,7 +62,7 @@ def printContours (contours):
             for p in c:
                 [[ x, y ]] = p
                 x_trans = x + x_trans_factor
-                y_trans = y + y_trans_factor
+                y_trans = -y + y_trans_factor
                 (q1, q2) = mgi.MGI(x_trans, y_trans)
                 print 'x: ', x, 'y:', y, '	--> x-trans: ', x_trans, 'y_trans:', y_trans, '	--> q1: ', q1, 'q2:', q2
                 pantolib.GoTo(q1, q2)
@@ -73,18 +74,18 @@ def printContours (contours):
         print "Image successfully printed !!!"
 
 
-
+pantolib.Init()
 while True:
 
     if APP_STATE == APP_STATE_INIT:
         img = cv2.imread('welcome.jpg')
         cv2.imshow('welcome', img)
-
+	
         print "WELCOME TO THE PANTOGRAPHE !!!!"
         print "Press n to advance to the next step..."
 
     elif APP_STATE == APP_STATE_TAKE_PICTURE:
-
+        
         img = cv2.imread('1.jpg')
         cv2.imshow('Picture', img)
 
@@ -100,11 +101,16 @@ while True:
         # we need to keep in mind aspect ratio so the image does
         # not look skewed or distorted -- therefore, we calculate
         # the ratio of the new image to the old image
-        r = float(resized_width) / image.shape[1]
-        dim = (resized_width, int(image.shape[0] * r)) 
+        r = float(max_width) / image.shape[1]
+        dim = (max_width, int(image.shape[0] * r))
+        if dim[0] > max_height:
+            r = float(max_height) / image.shape[0]
+            dim = (int(image.shape[1] * r), max_height)
         # perform the actual resizing of the image and show it
         resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
         cv2.imshow("resized", resized)
+        x_trans_factor = -dim[0]/2.
+        y_trans_factor = dim[1]/2. + 130
 
         print "Press n when done."
 
@@ -115,21 +121,27 @@ while True:
 
         print "Loading Image..."
         cv2.namedWindow('edge')
-        cv2.createTrackbar('thrs1', 'edge', 2000, 5000, nothing)
-        cv2.createTrackbar('thrs2', 'edge', 4000, 5000, nothing)
+        cv2.createTrackbar('1', 'edge', 2000, 5000, nothing)
+        cv2.createTrackbar('2', 'edge', 4000, 5000, nothing)
 
         img = cv2.imread('resized.jpg')
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        thrs1 = cv2.getTrackbarPos('thrs1', 'edge')
-        thrs2 = cv2.getTrackbarPos('thrs2', 'edge')
-        edge = cv2.Canny(gray, thrs1, thrs2, apertureSize=5)
-        vis = img.copy()
-        vis /= 2
-        vis[edge != 0] = (0, 255, 0)
-        cv2.imshow('edge', vis)
-
         print "Adjust the thresholds..."
         print "Press n when done."
+
+        while True:
+            thrs1 = cv2.getTrackbarPos('1', 'edge')
+            thrs2 = cv2.getTrackbarPos('2', 'edge')
+            edge = cv2.Canny(gray, thrs1, thrs2, apertureSize=5)
+            vis = img.copy()
+            vis /= 2
+            vis[edge != 0] = (0, 255, 0)
+            cv2.imshow('edge', vis)
+            ch = cv2.waitKey(5)
+            if ch == ord('n'):
+                break
+
+     
 
     elif APP_STATE == APP_STATE_CONTOUR:
 

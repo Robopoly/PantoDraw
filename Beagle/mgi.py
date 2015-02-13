@@ -47,7 +47,8 @@ def MGI( x, y ):
     q2atan2 = np.arctan2(E2p[1], E2p[0])
     q2 = q2acos + np.pi - q2atan2
     #print 'q2: ', q2
-
+    q1 = q1 * 180./np.pi
+    q2 = q2 * 180./np.pi
     return q1, q2
 
 
