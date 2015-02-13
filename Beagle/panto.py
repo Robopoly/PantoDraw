@@ -75,6 +75,7 @@ def printContours (contours):
 
 
 pantolib.Init()
+cap = cv2.VideoCapture(0)
 while True:
 
     if APP_STATE == APP_STATE_INIT:
@@ -85,7 +86,9 @@ while True:
         print "Press n to advance to the next step..."
 
     elif APP_STATE == APP_STATE_TAKE_PICTURE:
-        
+        ret,img = cap.read()
+	cv2.imwrite('1.jpg', img)
+      
         img = cv2.imread('1.jpg')
         cv2.imshow('Picture', img)
 
