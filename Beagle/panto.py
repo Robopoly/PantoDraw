@@ -35,7 +35,9 @@ APP_STATE = 0
 def nothing(*arg):
     pass
 
-def printContours (contours):
+#TODO: ADD BUTTON TO EXIT AT ANY MOMENT FROM THE APP !!!!!
+
+def printContours (contours, r):
 
     if len(contours) == 0:
         print "ERROR: NO CONTOUR FOUND !!!"
@@ -53,10 +55,13 @@ def printContours (contours):
             # Lift pen, go to first point of the countour, and start drawing
             pantolib.Down()
             [[ x, y ]] = c[0]
-            x_trans = x + x_trans_factor
-            y_trans = -y + y_trans_factor
+            x_resize = int(x*r)
+            y_resize =  int(y*r)
+            print 'x: ', x, 'y:', y, '	--> int(x*r): ', x_resize, ' int(y*r):', y_resize
+            x_trans = x_resize + x_trans_factor
+            y_trans = -y_resize + y_trans_factor
             (q1, q2) = mgi.MGI(x_trans, y_trans)
-            print 'x: ', x, 'y:', y, '	--> x-trans: ', x_trans, 'y_trans:', y_trans, '	--> q1: ', q1, 'q2:', q2
+            print 'x: ', x_resize, 'y:', y_resize, '	--> x-trans: ', x_trans, 'y_trans:', y_trans, '	--> q1: ', q1, 'q2:', q2
             pantolib.GoTo(q1, q2)
             sleep(TIME_BETWEEN_CONTOURS) # Time in seconds.
             pantolib.Up()
@@ -65,10 +70,13 @@ def printContours (contours):
             c = c[1:]
             for p in c:
                 [[ x, y ]] = p
-                x_trans = x + x_trans_factor
-                y_trans = -y + y_trans_factor
+                x_resize = int(x*r)
+                y_resize =  int(y*r)
+                print 'x: ', x, 'y:', y, '	--> int(x*r): ', x_resize, ' int(y*r):', y_resize
+                x_trans = x_resize + x_trans_factor
+                y_trans = -y_resize + y_trans_factor
                 (q1, q2) = mgi.MGI(x_trans, y_trans)
-                print 'x: ', x, 'y:', y, '	--> x-trans: ', x_trans, 'y_trans:', y_trans, '	--> q1: ', q1, 'q2:', q2
+                print 'x: ', x_resize, 'y:', y_resize, '	--> x-trans: ', x_trans, 'y_trans:', y_trans, '	--> q1: ', q1, 'q2:', q2
                 pantolib.GoTo(q1, q2)
                 sleep(TIME_BETWEEN_POINTS) # Time in seconds.
 
@@ -204,7 +212,7 @@ while True:
         #np.savetxt('contour.txt', contour_example)
         #contour = np.load('contour.txt')
 
-        printContours(contours)
+        printContours(contours, r)
 
         img = cv2.imread('printed.jpg')
         cv2.imshow('Printed', img)
