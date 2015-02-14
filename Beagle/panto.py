@@ -88,6 +88,27 @@ def printContours (contours, r):
 
 pantolib.Init()
 
+cam = cv2.VideoCapture(0)
+
+# Set fourcc before the width
+print "before"
+cam.set(cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC('Y', 'U', 'Y', 'V') );
+print "after"
+#cam.set(cv2.cv.CV_CAP_PROP_FOURCC, 2);
+# Set camera resolution. The max resolution is webcam dependent
+# so change it to a resolution that is both supported by your camera
+# and compatible with your monitor
+cam.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320)
+cam.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
+
+print "Camera Properties:"
+print "\t Width: ",cam.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)
+print "\t Height: ",cam.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)
+print "\t FourCC: ",cam.get(cv2.cv.CV_CAP_PROP_FOURCC)
+print "\t Framerate: ",cam.get(cv2.cv.CV_CAP_PROP_FPS)
+print "\t Number of Frames: ",cam.get(7)
+
+
 while True:
 
     if APP_STATE == APP_STATE_INIT:
@@ -99,23 +120,26 @@ while True:
 
     elif APP_STATE == APP_STATE_TAKE_PICTURE:
 
+        cv2.destroyAllWindows()
+
         if config.PLATFORM == 'BEAGLE':
-            
-            cap = cv2.VideoCapture(0)
-
-            ret,img = cap.read()
-            cv2.imwrite('1.jpg', img)
-      
-            # When everything done, release the capture
-            cap.release()
-            cv2.destroyAllWindows()
-
-        img = cv2.imread('1.jpg')
-        cv2.imshow('Picture', img)
-
-        print "Press any key to repeat the picture, n when done."
+ 
+            for i in range (1,10):           
+                ret, img = cam.read()
+            ret, img = cam.read()
+            cv2.imshow('Photo', img)
+#                if cv2.waitKey(1) == 27:
+#                    break
+        
+            print "Press any key to repeat the picture, n when done."
 
     elif APP_STATE == APP_STATE_RESIZE:
+
+        cv2.imwrite('1.jpg', img)
+                        
+        # When everything done, release the capture
+        cam.release()
+        cv2.destroyAllWindows()
 
         print "Loading Original Image..."
         image = cv2.imread('./1.jpg')
