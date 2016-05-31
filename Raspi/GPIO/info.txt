@@ -1,6 +1,0 @@
-Pin Numbering
-http://raspberrypi.stackexchange.com/questions/12966/what-is-the-difference-between-board-and-bcm-for-gpio-pin-numbering
-
-PWM via DMA
-http://www.raspberrypi.org/forums/viewtopic.php?f=44&t=36572
-
