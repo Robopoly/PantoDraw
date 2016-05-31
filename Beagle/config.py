@@ -1,6 +1,0 @@
-
-#PLATFORM = 'PC'
-PLATFORM = 'BEAGLE'
-
-
-
