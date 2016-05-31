@@ -1,0 +1,5 @@
+Remove Pin=Serial DATA-1 From Net=PGND
+Remove Pin=Serial DATA-2 From Net=SCLK
+Remove Pin=Serial DATA-3 From Net=SDATA
+Remove Pin=Serial DATA-4 From Net=SSTB
+Remove Pin=Serial DATA-5 From Net=SCS

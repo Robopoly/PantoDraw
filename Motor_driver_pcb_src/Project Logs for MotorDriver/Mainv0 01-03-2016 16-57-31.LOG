@@ -1,0 +1,21 @@
+Added Component: Designator=OUTA(PCBComponent_1)
+Added Component: Designator=OUTB(PCBComponent_1)
+Added Component: Designator=OUTC(PCBComponent_1)
+Added Component: Designator=OUTD(PCBComponent_1)
+Added Component: Designator=POWER IN(PCBComponent_1)
+Added Pin To Net: NetName=AOUT1 Pin=OUTA-1
+Added Pin To Net: NetName=AOUT2 Pin=OUTA-2
+Added Pin To Net: NetName=BOUT1 Pin=OUTB-1
+Added Pin To Net: NetName=BOUT2 Pin=OUTB-2
+Added Pin To Net: NetName=COUT1 Pin=OUTC-1
+Added Pin To Net: NetName=COUT2 Pin=OUTC-2
+Added Pin To Net: NetName=DOUT1 Pin=OUTD-1
+Added Pin To Net: NetName=DOUT2 Pin=OUTD-2
+Added Pin To Net: NetName=VM Pin=POWER IN-1
+Added Pin To Net: NetName=PGND Pin=POWER IN-2
+Added Member To Class: ClassName=Main_v0.1 Member=Component OUTA Power Connector
+Added Member To Class: ClassName=Main_v0.1 Member=Component OUTB Power Connector
+Added Member To Class: ClassName=Main_v0.1 Member=Component OUTC Power Connector
+Added Member To Class: ClassName=Main_v0.1 Member=Component OUTD Power Connector
+Added Member To Class: ClassName=Main_v0.1 Member=Component POWER IN Power Connector
+Added Room: Name=Main_v0.1

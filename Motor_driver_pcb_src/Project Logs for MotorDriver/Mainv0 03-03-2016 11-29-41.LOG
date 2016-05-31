@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=V3P3 Pin=R22-2
+Removed Pin From Net: NetName=PGND Pin=R23-1
+Removed Pin From Net: NetName=PGND Pin=U?-0
+Removed Member From Class: ClassName=Main_v0.1 Member=R22
+Removed Member From Class: ClassName=Main_v0.1 Member=R23
+Change Net Name : Old Net Name=CDVREF New Net Name=ABVREF

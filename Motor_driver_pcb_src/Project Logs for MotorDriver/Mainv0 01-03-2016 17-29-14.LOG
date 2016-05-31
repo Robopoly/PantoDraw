@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=PGND Pin=Serial DATA-1
+Removed Pin From Net: NetName=SCLK Pin=Serial DATA-2
+Removed Pin From Net: NetName=SDATA Pin=Serial DATA-3
+Removed Pin From Net: NetName=SSTB Pin=Serial DATA-4
+Removed Pin From Net: NetName=SCS Pin=Serial DATA-5
+Removed Member From Class: ClassName=Main_v0.1 Member=Serial DATA
+Added Component: Designator=P1(HDR1X5)
+Added Pin To Net: NetName=PGND Pin=P1-1
+Added Pin To Net: NetName=SSTB Pin=P1-2
+Added Pin To Net: NetName=SDATA Pin=P1-3
+Added Pin To Net: NetName=SCLK Pin=P1-4
+Added Pin To Net: NetName=SCS Pin=P1-5
+Added Member To Class: ClassName=Main_v0.1 Member=Component P1 Header 5
+Added Room: Name=Main_v0.1

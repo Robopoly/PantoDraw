@@ -1,0 +1,2 @@
+Added Pin To Net: NetName=ABVREF Pin=U?-17
+Change Net Name : Old Net Name=ABVREF New Net Name=VREF
